@@ -32,9 +32,8 @@ class SoapAdapter implements AdapterInterface
      *
      * @param string $baseUrl
      * @param string $address
-     * @param array $contextOptions
      */
-    public function __construct($baseUrl, $address, array $contextOptions = null)
+    public function __construct($baseUrl, $address)
     {
         $this->baseUrl = $baseUrl;
         $this->address = $address;
@@ -43,15 +42,7 @@ class SoapAdapter implements AdapterInterface
             'soap_version' => SOAP_1_2,
             'trace' => true,
             'style' => SOAP_DOCUMENT
-        ], $contextOptions);
-    }
-
-    /**
-     * @return SoapClient
-     */
-    public function getClient()
-    {
-        return $this->client;
+        ]);
     }
 
     /**
@@ -108,7 +99,7 @@ class SoapAdapter implements AdapterInterface
     {
         $this->prepareSoapHeader('http://CIS/BIR/PUBL/2014/07/IUslugaBIRzewnPubl/DanePobierzPelnyRaport', $this->address, $sid);
         $result = $this->client->DanePobierzPelnyRaport([
-            RegonConstantsInterface::PARAM_REGON => $regon,
+            RegonConstantsInterface::PARAM_REGOM => $regon,
             RegonConstantsInterface::PARAM_REPORT_NAME => $reportType
         ]);
 
@@ -169,7 +160,7 @@ class SoapAdapter implements AdapterInterface
      * @param $namespace
      * @param $name
      * @param null $data
-     * @param bool $mustUnderstand
+     * @param bool|false $mustUnderstand
      * @return \SoapHeader
      */
     protected function setHeader($namespace, $name, $data = null, $mustUnderstand = false)

@@ -13,18 +13,13 @@ interface RegonConstantsInterface
     const PARAM_SESSION_ID = 'pIdentyfikatorSesji';
     const PARAM_CAPTCHA = 'pCaptcha';
     const PARAM_SEARCH = 'pParametryWyszukiwania';
-    const PARAM_REGON = 'pRegon';
+    const PARAM_REGOM = 'pRegon';
     const PARAM_REPORT_NAME = 'pNazwaRaportu';
     const PARAM_PARAM_NAME = 'pNazwaParametru';
 
     const SEARCH_TYPE_NIP  = 'Nip';
     const SEARCH_TYPE_KRS  = 'Krs';
     const SEARCH_TYPE_REGON = 'Regon';
-
-    const SEARCH_TYPE_NIPS  = 'Nipy';
-    const SEARCH_TYPE_KRSES = 'Krsy';
-    const SEARCH_TYPE_REGONS_9  = 'Regony9zn';
-    const SEARCH_TYPE_REGONS_14  = 'Regony14zn';
 
     const PARAM_STATUS_DATE_STATE = 'StanDanych';
     const PARAM_MESSAGE_CODE = 'KomunikatKod';
@@ -37,9 +32,4 @@ interface RegonConstantsInterface
     const SERVICE_AVAILABLE = 1;
     const SERVICE_TECHNICAL_BREAK = 2;
 
-    const NEED_TO_CHECK_CAPTCHA = 1;
-    const TO_FEW_IDENTIFIERS = 2;
-    const NOT_FOUND = 4;
-    const NO_ACCESS_TO_REPORT = 5;
-    const SESSION_ERROR = 7;
 }

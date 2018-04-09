@@ -5,88 +5,121 @@ namespace GusApi;
  * Class SearchReport
  * @package GusApi
  */
-class SearchReport implements \JsonSerializable
+class SearchReport
 {
-    const TYPE_JURIDICAL_PERSON = 'p';
-
-    const TYPE_NATURAL_PERSON = 'f';
-
-    const TYPE_LOCAL_ENTITY_JURIDICAL_PERSON = 'lp';
-
-    const TYPE_LOCAL_ENTITY_NATURAL_PERSON = 'lf';
-
-    /**
-     * @var string
-     */
     private $regon;
-
-    /**
-     * @var string
-     */
     private $regon14;
-
-    /**
-     * @var string
-     */
     private $name;
-
-    /**
-     * @var string
-     */
     private $province;
-
-    /**
-     * @var string
-     */
     private $district;
-
-    /**
-     * @var string
-     */
     private $community;
-
-    /**
-     * @var string
-     */
     private $city;
-
-    /**
-     * @var string
-     */
     private $zipCode;
-
-    /**
-     * @var string
-     */
     private $street;
-
-    /**
-     * @var string
-     */
     private $type;
-
-    /**
-     * @var int
-     */
     private $silo;
 
-    /**
-     * SearchReport constructor.
-     * @param $data
-     */
     function __construct($data)
     {
-        $this->regon = (string)$data->Regon;
-        $this->name = (string)$data->Nazwa;
-        $this->province = (string)$data->Wojewodztwo;
-        $this->district = (string)$data->Powiat;
-        $this->community = (string)$data->Gmina;
-        $this->city = (string)$data->Miejscowosc;
-        $this->zipCode = (string)$data->KodPocztowy;
-        $this->street = (string)$data->Ulica;
-        $this->type = $this->makeType((string)$data->Typ);
+        $this->regon = $data->Regon;
+        $this->name = $data->Nazwa;
+        $this->province = $data->Wojewodztwo;
+        $this->district = $data->Powiat;
+        $this->community = $data->Gmina;
+        $this->city = $data->Miejscowosc;
+        $this->zipCode = $data->KodPocztowy;
+        $this->street = $data->Ulica;
+        $this->type = $this->makeType($data->Typ);
         $this->regon14 = $this->makeRegon14($this->regon);
-        $this->silo = (int)$data->SilosID;
+        $this->silo = $data->SilosID;
+    }
+
+    /**
+     * @param mixed $regon
+     */
+    public function setRegon($regon)
+    {
+        $this->regon = $regon;
+    }
+
+    /**
+     * @param string $regon14
+     */
+    public function setRegon14($regon14)
+    {
+        $this->regon14 = $regon14;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @param mixed $province
+     */
+    public function setProvince($province)
+    {
+        $this->province = $province;
+    }
+
+    /**
+     * @param mixed $district
+     */
+    public function setDistrict($district)
+    {
+        $this->district = $district;
+    }
+
+    /**
+     * @param mixed $community
+     */
+    public function setCommunity($community)
+    {
+        $this->community = $community;
+    }
+
+    /**
+     * @param mixed $city
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
+    }
+
+    /**
+     * @param mixed $zipCode
+     */
+    public function setZipCode($zipCode)
+    {
+        $this->zipCode = $zipCode;
+    }
+
+    /**
+     * @param mixed $street
+     */
+    public function setStreet($street)
+    {
+        $this->street = $street;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @param mixed $silo
+     */
+    public function setSilo($silo)
+    {
+        $this->silo = $silo;
     }
 
     /**
@@ -188,38 +221,20 @@ class SearchReport implements \JsonSerializable
     }
 
     /**
-     * @return int
+     * @return mixed
      */
     public function getSilo()
     {
         return $this->silo;
     }
 
-    /**
-     * @param string $regon
-     * @return string
-     */
     private function makeRegon14($regon)
     {
         return str_pad($regon, 14, "0");
     }
 
-    /**
-     * @param string $type
-     * @return string
-     */
     private function makeType($type)
     {
         return trim(strtolower($type));
-    }
-    
-    /**
-     * @return array
-     */
-    public function jsonSerialize()
-    {
-        $vars = get_object_vars($this);
-    
-        return $vars;
     }
 }

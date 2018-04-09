@@ -2,7 +2,7 @@
 namespace GusApi\Client;
 
 /**
- * Class SoapClient provides a client for the GUS server
+ * Class SoapClient provide a cient for a GUS server
  * @package GusApi\Client
  */
 class SoapClient extends \SoapClient
@@ -18,16 +18,12 @@ class SoapClient extends \SoapClient
     protected $location;
 
     /**
-     * SoapClient constructor.
-     * @param string $wsdl
-     * @param string $location
-     * @param array|null $options
-     * @param array|null $contextOptions
+     * @inheritdoc
      */
-    public function __construct($wsdl, $location, array $options = null, array $contextOptions = null)
+    public function __construct($wsdl, $location, array $options = null)
     {
         $this->setLocation($location);
-        $this->context = $this->createContext($contextOptions);
+        $this->context = $this->createContext();
         $options['stream_context'] = $this->context;
 
         parent::__construct($wsdl, $options);
@@ -40,17 +36,13 @@ class SoapClient extends \SoapClient
      * @param string $location location
      * @param string $action action
      * @param int $version version
-     * @param int $one_way [optional] <p>
-     * If one_way is set to 1, this method returns nothing.
-     * Use this where a response is not expected.
-     * </p>
      * @return string response
      */
     public function __doRequest($request, $location, $action, $version = SOAP_1_2, $one_way = NULL) {
         $location = $this->location;
         $response = parent::__doRequest($request, $location, $action, $version, $one_way);
-
-        return RequestDecoder::decode($response);
+        $response = stristr(stristr($response, "<s:"), "</s:Envelope>", true) . "</s:Envelope>";
+        return $response;
     }
 
     /**
@@ -86,12 +78,11 @@ class SoapClient extends \SoapClient
     /**
      * Create http context
      *
-     * @param array|null $contextOptions
      * @return resource
      */
-    private function createContext(array $contextOptions = null)
+    private function createContext()
     {
-        return stream_context_create($contextOptions);
+        return stream_context_create();
     }
 
     /**

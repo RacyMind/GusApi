@@ -43,22 +43,6 @@ class GusApi
     }
 
     /**
-     * @return string
-     */
-    public function getUserKey()
-    {
-        return $this->userKey;
-    }
-
-    /**
-     * @return AdapterInterface
-     */
-    public function getAdapter()
-    {
-        return $this->adapter;
-    }
-
-    /**
      * Login in to regon server
      *
      * @return string session id value
@@ -137,7 +121,7 @@ class GusApi
      *
      * @param string $sid session id
      * @param string $nip NIP number
-     * @return SearchReport[] search subject information object
+     * @return SearchReport search subject information object
      * @throws NotFoundException
      */
     public function getByNip($sid, $nip)
@@ -152,7 +136,7 @@ class GusApi
      *
      * @param $sid
      * @param $regon
-     * @return SearchReport[] search subject information object
+     * @return SearchReport search subject information object
      * @throws NotFoundException
      */
     public function getByRegon($sid, $regon)
@@ -167,85 +151,13 @@ class GusApi
      *
      * @param $sid
      * @param $krs
-     * @return SearchReport[] search subject information object
+     * @return SearchReport search subject information object
      * @throws NotFoundException
      */
     public function getByKrs($sid, $krs)
     {
         return $this->search($sid, [
             RegonConstantsInterface::SEARCH_TYPE_KRS => $krs
-        ]);
-    }
-
-    /**
-     * @param $sid
-     * @param array $nips Maxium quantity is 20.
-     * @return SearchReport[]
-     * @throws NotFoundException
-     */
-    public function getByNips($sid, array $nips)
-    {
-        if (count($nips) > 20) {
-            throw new \InvalidArgumentException("Too many NIP numbers. Maximum quantity is 20.");
-        }
-        $nips = implode(',', $nips);
-
-        return $this->search($sid, [
-            RegonConstantsInterface::SEARCH_TYPE_NIPS => $nips
-        ]);
-    }
-
-    /**
-     * @param $sid
-     * @param array $krses Maxium quantity is 20.
-     * @return SearchReport[]
-     * @throws NotFoundException
-     */
-    public function getByKrses($sid, array $krses)
-    {
-        if (count($krses) > 20) {
-            throw new \InvalidArgumentException("Too many KRS numbers. Maximum quantity is 20.");
-        }
-        $krses = implode(',', $krses);
-
-        return $this->search($sid, [
-            RegonConstantsInterface::SEARCH_TYPE_KRSES => $krses
-        ]);
-    }
-
-    /**
-     * @param $sid
-     * @param array $regons Maxium quantity is 20.
-     * @return SearchReport[]
-     * @throws NotFoundException
-     */
-    public function getByRegons9($sid, array $regons)
-    {
-        if (count($regons) > 20) {
-            throw new \InvalidArgumentException("Too many REGON numbers. Maximum quantity is 20.");
-        }
-        $regons = implode(',', $regons);
-
-        return $this->search($sid, [
-            RegonConstantsInterface::SEARCH_TYPE_REGONS_9 => $regons
-        ]);
-    }
-
-    /**
-     * @param $sid
-     * @param array $regons Maxium quantity is 20.
-     * @return SearchReport[]
-     * @throws NotFoundException
-     */
-    public function getByregons14($sid, array $regons)
-    {
-        if (count($regons) > 20) {
-            throw new \InvalidArgumentException("Too many REGON numbers. Maximum quantity is 20.");
-        }
-        $regons = implode(',', $regons);
-
-        return $this->search($sid, [
-            RegonConstantsInterface::SEARCH_TYPE_REGONS_14 => $regons
         ]);
     }
 
@@ -265,7 +177,7 @@ class GusApi
     /**
      * Get get message about search if you don't get data
      *
-     * @param $sid
+     * @param sid
      * @return string
      */
     public function getResultSearchMessage($sid)
@@ -309,21 +221,17 @@ class GusApi
     /**
      * @param $sid
      * @param array $searchData
-     * @return SearchReport[]
+     * @return SearchReport
      * @throws NotFoundException
      */
     private function search($sid, array $searchData)
     {
-        $result = [];
         try{
             $response = $this->adapter->search($sid, $searchData);
         } catch (NoDataException $e) {
             throw new NotFoundException(sprintf("Not found subject"));
         }
-        foreach ($response as $report) {
-            $result[] = new SearchReport($report);
-        }
 
-        return $result;
+        return new SearchReport($response[0]);
     }
 }

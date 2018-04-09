@@ -6,6 +6,7 @@ session_start();
 use GusApi\GusApi;
 use GusApi\RegonConstantsInterface;
 use GusApi\Exception\InvalidUserKeyException;
+use GusApi\ReportTypes;
 
 
 $key = 'abcde12345abcde12345'; // <--- your user key / twój klucz użytkownika
@@ -39,21 +40,16 @@ if ($gus->serviceStatus() === RegonConstantsInterface::SERVICE_AVAILABLE) {
 
             $nip = $_POST['nip'];
             try {
-                $gusReports = $gus->getByNip($_SESSION['sid'], $nip);
-                var_dump($gusReports);
-                $mapper = new \GusApi\ReportTypeMapper();
-
-                foreach ($gusReports as $gusReport) {
-                    $reportType = $mapper->getReportType($gusReport);
-
-                    var_dump($gus->getFullReport(
+                $gusReport = $gus->getByNip($_SESSION['sid'], $nip);
+                var_dump($gusReport);
+                var_dump(
+                    $gus->getFullReport(
                         $_SESSION['sid'],
                         $gusReport,
-                        $reportType
-                    ));
-
-                    echo $gusReport->getName();
-                }
+                        ReportTypes::REPORT_ACTIVITY_LAW_PUBLIC
+                    )
+                );
+                echo $gusReport->getName();
 
             } catch (\GusApi\Exception\NotFoundException $e) {
                 echo 'No data found <br>';
